@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class CrimeListFragment extends Fragment {
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private Button mSeriousButton;
+        private ImageView mSolvedImageView;
 
         private Crime mCrime;
 
@@ -56,6 +58,7 @@ public class CrimeListFragment extends Fragment {
                 itemView.setOnClickListener(this); // override onClick to make it do w.e you want
                 mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
                 mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+                mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
 
             }
             else{
@@ -63,7 +66,7 @@ public class CrimeListFragment extends Fragment {
                 mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
                 mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
                 mSeriousButton = (Button) itemView.findViewById(R.id.serious_button);
-
+                mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
             }
 
         }
@@ -79,6 +82,7 @@ public class CrimeListFragment extends Fragment {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(mCrime.getDate().toString());
+            mSolvedImageView.setVisibility(crime.isSolved()? View.VISIBLE : View.GONE);//if the crime is solved, view will be shown : else it wont be
             if(mSeriousButton != null) {
                 mSeriousButton.setOnClickListener(new View.OnClickListener() {
                     @Override
