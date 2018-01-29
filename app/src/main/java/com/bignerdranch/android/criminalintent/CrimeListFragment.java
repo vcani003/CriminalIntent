@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+
 
     @Nullable
     @Override
@@ -43,14 +45,26 @@ public class CrimeListFragment extends Fragment {
 
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private Button mSeriousButton;
+
         private Crime mCrime;
 
-        public CrimeHolder(LayoutInflater inflater, ViewGroup parent){
+        public CrimeHolder(LayoutInflater inflater, ViewGroup parent, int view){
 
-            super(inflater.inflate(R.layout.list_item_crime, parent, false));
-            itemView.setOnClickListener(this); // override onClick to make it do w.e you want
-            mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            super(inflater.inflate(view, parent, false));
+            if(view == R.layout.list_item_crime) {
+                itemView.setOnClickListener(this); // override onClick to make it do w.e you want
+                mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
+                mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+
+            }
+            else{
+                itemView.setOnClickListener(this); // override onClick to make it do w.e you want
+                mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
+                mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+                mSeriousButton = (Button) itemView.findViewById(R.id.serious_button);
+
+            }
 
         }
 
@@ -65,6 +79,15 @@ public class CrimeListFragment extends Fragment {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(mCrime.getDate().toString());
+            if(mSeriousButton != null) {
+                mSeriousButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getActivity(), "Police Contacted.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
         }
     }
 
@@ -84,7 +107,15 @@ public class CrimeListFragment extends Fragment {
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new CrimeHolder(layoutInflater, parent);
+            int view;
+            if(viewType == 1){ //1 == serious crime layout
+                view = R.layout.serious_list_item_crime;
+                return new CrimeHolder(layoutInflater, parent, view);
+            }
+            else {
+                view = R.layout.list_item_crime;
+                return new CrimeHolder(layoutInflater, parent, view);
+            }
         }
 
         @Override
@@ -98,7 +129,19 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        @Override
+        public int getItemViewType(int position) {
+            if(mCrimes.get(position).isRequiresPolice()){
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
+
 
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
