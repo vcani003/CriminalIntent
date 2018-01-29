@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,8 @@ public class CrimeListFragment extends Fragment {
         public void bind(Crime crime){
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            DateFormat df = new DateFormat();
+            mDateTextView.setText(df.format("EEEE, MMM d, yyyy", mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved()? View.VISIBLE : View.GONE);//if the crime is solved, view will be shown : else it wont be
             if(mSeriousButton != null) {
                 mSeriousButton.setOnClickListener(new View.OnClickListener() {
