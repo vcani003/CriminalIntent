@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -73,9 +74,15 @@ public class CrimeListFragment extends Fragment {
         }
 
         @Override
-        public void onClick(View view){ // in this case, it will display a toast of the row info
-            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!",
-                    Toast.LENGTH_SHORT).show();
+        public void onClick(View view){
+            // in this case, it will display a toast of the row info
+//            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!",
+//                    Toast.LENGTH_SHORT).show();
+
+            //Intent intent = new Intent(getActivity(), CrimeActivity.class);
+
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
         }
 
         //bind textViews to show a particular crime
